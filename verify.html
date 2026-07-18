@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identity Verification - TaskRewards Pro</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- jQuery for validation -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #1e293b;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        /* ===== CONTAINER ===== */
+        .verification-container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        /* ===== HEADER ===== */
+        .verification-header {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .verification-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .verification-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 25px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .security-banner {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px 25px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            font-size: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        /* ===== PROGRESS BAR ===== */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 60%;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            border-radius: 4px;
+        }
+        
+        /* ===== FORM SECTION ===== */
+        .verification-form {
+            padding: 40px;
+        }
+        
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #475569;
+            font-size: 14px;
+        }
+        
+        .form-label.required::after {
+            content: " *";
+            color: #ef4444;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            transition: all 0.2s ease;
+        }
+        
+        .form-input:focus {
+            border-color: #3b82f6;
+            background: white;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+        
+        .input-hint {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        /* ===== SPECIFIC FIELDS ===== */
+        .ssn-group {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .ssn-group .form-label {
+            color: #7f1d1d;
+        }
+        
+        .card-group {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .card-group .form-label {
+            color: #0c4a6e;
+        }
+        
+        /* ===== FORM NAVIGATION ===== */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .btn-prev {
+            background: #f1f5f9;
+            color: #475569;
+            border: 2px solid #cbd5e1;
+        }
+        
+        .btn-prev:hover {
+            background: #e2e8f0;
+        }
+        
+        .btn-next {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+        
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 16px 45px;
+            font-size: 17px;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        /* ===== LEGAL ===== */
+        .legal-disclaimer {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 40px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .legal-title {
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legal-text {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.7;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            margin-top: 4px;
+            accent-color: #3b82f6;
+        }
+        
+        /* ===== FOOTER ===== */
+        .verification-footer {
+            text-align: center;
+            padding: 30px;
+            background: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .footer-links {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+        
+        .footer-links a {
+            color: #475569;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: #3b82f6;
+            text-decoration: underline;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .verification-container {
+                margin: 10px auto;
+                border-radius: 15px;
+            }
+            
+            .verification-header {
+                padding: 30px 20px;
+            }
+            
+            .verification-form {
+                padding: 30px 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        /* ===== VALIDATION ===== */
+        .error-message {
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+        
+        .form-input.error {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+        
+        .success-message {
+            color: #10b981;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <!-- HEADER -->
+        <div class="verification-header">
+            <div class="header-content">
+                <div class="verification-title">
+                    <i class="fas fa-id-card"></i>
+                    Identity Verification
+                </div>
+                
+                <p class="verification-subtitle">
+                    To comply with financial regulations and prevent fraud, we must verify your identity before you can begin earning.
+                    This process takes less than 5 minutes and is required by law.
+                </p>
+                
+                <div class="security-banner">
+                    <i class="fas fa-shield-alt"></i>
+                    Your information is protected with bank-level 256-bit SSL encryption
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-text">
+                        <span>Verification Progress</span>
+                        <span>60% Complete</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- VERIFICATION FORM -->
+        <div class="verification-form">
+            <form action="process_verify.php" method="POST" id="verificationForm">
+                
+                <!-- STEP 1: Personal Information -->
+                <div class="form-step active" id="step1">
+                    <h2 class="step-title">
+                        <span class="step-number">1</span>
+                        Personal Information
+                    </h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required" for="first_name">First Name</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="first_name" name="first_name" class="form-input" placeholder="John" required>
+                                <i class="fas fa-user input-icon"></i>
+                            </div>
+                            <div class="error-message" id="first_name_error">Please enter your first name</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required" for="last_name">Last Name</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="last_name" name="last_name" class="form-input" placeholder="Doe" required>
+                                <i class="fas fa-user input-icon"></i>
+                            </div>
+                            <div class="error-message" id="last_name_error">Please enter your last name</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required" for="dob">Date of Birth</label>
+                            <div class="input-wrapper">
+                                <input type="date" id="dob" name="dob" class="form-input" required>
+                                <i class="fas fa-calendar input-icon"></i>
+                            </div>
+                            <div class="input-hint">
+                                <i class="fas fa-info-circle"></i>
+                                Must be at least 18 years old
+                            </div>
+                            <div class="error-message" id="dob_error">Please enter a valid date of birth</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required" for="phone">Phone Number</label>
+                            <div class="input-wrapper">
+                                <input type="tel" id="phone" name="phone" class="form-input" placeholder="(555) 123-4567" required>
+                                <i class="fas fa-phone input-icon"></i>
+                            </div>
+                            <div class="input-hint">
+                                <i class="fas fa-info-circle"></i>
+                                For account recovery and verification codes
+                            </div>
+                            <div class="error-message" id="phone_error">Please enter a valid phone number</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- STEP 2: Address Information -->
+                <div class="form-step" id="step2">
+                    <h2 class="step-title">
+                        <span class="step-number">2</span>
+                        Address Information
+                    </h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required" for="street">Street Address</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="street" name="street" class="form-input" placeholder="123 Main St" required>
+                                <i class="fas fa-home input-icon"></i>
+                            </div>
+                            <div class="error-message" id="street_error">Please enter your street address</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required" for="city">City</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="city" name="city" class="form-input" placeholder="New York" required>
+                            </div>
+                            <div class="error-message" id="city_error">Please enter your city</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required" for="state">State</label>
+                            <div class="input-wrapper">
+                                <select id="state" name="state" class="form-input" required>
+                                    <option value="">Select State</option>
+                                    <option value="AL">Alabama</option>
+                                    <option value="AK">Alaska</option>
+                                    <!-- Add all 50 states -->
+                                    <option value="NY">New York</option>
+                                    <option value="CA">California</option>
+                                    <option value="TX">Texas</option>
+                                    <option value="FL">Florida</option>
+                                    <!-- etc... -->
+                                </select>
+                                <i class="fas fa-chevron-down input-icon"></i>
+                            </div>
+                            <div class="error-message" id="state_error">Please select your state</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required" for="zip">ZIP Code</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="zip" name="zip" class="form-input" placeholder="10001" required pattern="[0-9]{5}">
+                                <i class="fas fa-map-pin input-icon"></i>
+                            </div>
+                            <div class="error-message" id="zip_error">Please enter a valid 5-digit ZIP code</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- STEP 3: Social Security Number -->
+                <div class="form-step" id="step3">
+                    <h2 class="step-title">
+                        <span class="step-number">3</span>
+                        Tax Information
+                    </h2>
+                    
+                    <div class="ssn-group">
+                        <div class="form-group">
+                            <label class="form-label required" for="ssn">Social Security Number</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="ssn" name="ssn" class="form-input" placeholder="XXX-XX-XXXX" pattern="[0-9]{3}-[0-9]{2}-[0-9]{4}" required>
+                                <i class="fas fa-id-card input-icon"></i>
+                            </div>
+                            <div class="input-hint">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Required by IRS for reporting earnings over $600 per year
+                            </div>
+                            <div class="error-message" id="ssn_error">Please enter a valid SSN (format: XXX-XX-XXXX)</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="ssn_reason">Why we need your SSN:</label>
+                            <ul style="font-size: 14px; color: #64748b; padding-left: 20px; margin-top: 10px;">
+                                <li>IRS Form 1099 reporting for earnings over $600</li>
+                                <li>Identity verification to prevent fraud</li>
+                                <li>Compliance with US tax regulations</li>
+                                <li>Payment processing and banking requirements</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- STEP 4: Payment Information -->
+                <div class="form-step" id="step4">
+                    <h2 class="step-title">
+                        <span class="step-number">4</span>
+                        Payment Setup
+                    </h2>
+                    
+                    <div class="card-group">
+                        <div class="form-group">
+                            <label class="form-label required" for="card_name">Name on Card</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="card_name" name="card_name" class="form-input" placeholder="JOHN DOE" required>
+                                <i class="fas fa-credit-card input-icon"></i>
+                            </div>
+                            <div class="error-message" id="card_name_error">Please enter the name on your card</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required" for="card_number">Card Number</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="card_number" name="card_number" class="form-input" placeholder="4111 1111 1111 1111" pattern="[0-9\s]{13,19}" required>
+                                <i class="fas fa-credit-card input-icon"></i>
+                            </div>
+                            <div class="error-message" id="card_number_error">Please enter a valid card number</div>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label required" for="card_expiry">Expiry Date</label>
+                                <div class="input-wrapper">
+                                    <input type="month" id="card_expiry" name="card_expiry" class="form-input" required>
+                                </div>
+                                <div class="error-message" id="card_expiry_error">Please enter expiry date</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label required" for="card_cvv">CVV</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="card_cvv" name="card_cvv" class="form-input" placeholder="123" pattern="[0-9]{3,4}" required maxlength="4">
+                                    <i class="fas fa-lock input-icon"></i>
+                                </div>
+                                <div class="input-hint">
+                                    <i class="fas fa-info-circle"></i>
+                                    3 or 4 digits on back of card
+                                </div>
+                                <div class="error-message" id="card_cvv_error">Please enter valid CVV</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="billing_address">Billing Address</label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="same_address" name="same_address" checked>
+                                <label for="same_address">Same as home address</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- STEP 5: Review & Submit -->
+                <div class="form-step" id="step5">
+                    <h2 class="step-title">
+                        <span class="step-number">5</span>
+                        Review & Submit
+                    </h2>
+                    
+                    <div style="background: #f8fafc; border-radius: 10px; padding: 25px; margin-bottom: 30px;">
+                        <h3 style="margin-bottom: 20px; color: #1e40af;">Please review your information:</h3>
+                        
+                        <div id="reviewContent" style="font-size: 15px; color: #475569; line-height: 2;">
+                            <!-- Dynamically filled by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="legal-disclaimer">
+                        <div class="legal-title">
+                            <i class="fas fa-file-contract"></i>
+                            Legal Agreements & Consent
+                        </div>
+                        
+                        <div class="legal-text">
+                            <p>By submitting this verification form, you confirm that:</p>
+                            <ol style="margin-left: 20px; margin-top: 10px;">
+                                <li>All information provided is accurate and complete</li>
+                                <li>You authorize TaskRewards Pro to verify your identity with third-party services</li>
+                                <li>You consent to electronic communication and disclosures</li>
+                                <li>You agree to our Terms of Service and Privacy Policy</li>
+                                <li>You authorize debit card validation (a temporary $1 hold may appear)</li>
+                                <li>You understand earnings over $600 will be reported to the IRS</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="terms_agree" name="terms_agree" required>
+                            <label for="terms_agree">
+                                I have read and agree to all terms and conditions above
+                            </label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="credit_check" name="credit_check">
+                            <label for="credit_check">
+                                I authorize a soft credit check for identity verification
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FORM NAVIGATION -->
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-prev" id="prevBtn" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i>
+                        Previous
+                    </button>
+                    
+                    <button type="button" class="btn btn-next" id="nextBtn" onclick="nextStep()">
+                        Continue
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    
+                    <button type="submit" class="btn btn-submit" id="submitBtn" style="display: none;">
+                        <i class="fas fa-paper-plane"></i>
+                        Complete Verification
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- FOOTER -->
+        <div class="verification-footer">
+            <div>
+                <i class="fas fa-lock"></i>
+                256-bit SSL Encryption • Your data is secure
+            </div>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+                <a href="contact.html">Contact Support</a>
+            </div>
+            <div style="margin-top: 15px; font-size: 12px;">
+                © 2023 TaskRewards Pro. All financial services provided by our banking partners.
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // Form Step Management
+        let currentStep = 1;
+        const totalSteps = 5;
+        
+        function showStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.form-step').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show current step
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            // Update progress bar
+            const progressPercent = (step / totalSteps) * 100;
+            document.querySelector('.progress-fill').style.width = `${progressPercent}%`;
+            document.querySelector('.progress-text span:last-child').textContent = `${Math.round(progressPercent)}% Complete`;
+            
+            // Update buttons
+            document.getElementById('prevBtn').style.display = step === 1 ? 'none' : 'flex';
+            document.getElementById('nextBtn').style.display = step === totalSteps ? 'none' : 'flex';
+            document.getElementById('submitBtn').style.display = step === totalSteps ? 'flex' : 'none';
+            
+            // Update review on step 5
+            if (step === 5) {
+                updateReview();
+            }
+        }
+        
+        function nextStep() {
+            if (validateStep(currentStep)) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            }
+        }
+        
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+        
+        // Validation
+        function validateStep(step) {
+            let isValid = true;
+            
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.querySelectorAll('.form-input.error').forEach(el => {
+                el.classList.remove('error');
+            });
+            
+            // Step-specific validation
+            switch(step) {
+                case 1:
+                    if (!document.getElementById('first_name').value.trim()) {
+                        showError('first_name', 'Please enter your first name');
+                        isValid = false;
+                    }
+                    if (!document.getElementById('last_name').value.trim()) {
+                        showError('last_name', 'Please enter your last name');
+                        isValid = false;
+                    }
+                    if (!document.getElementById('dob').value) {
+                        showError('dob', 'Please enter your date of birth');
+                        isValid = false;
+                    } else {
+                        const dob = new Date(document.getElementById('dob').value);
+                        const age = Math.floor((new Date() - dob) / (365.25 * 24 * 60 * 60 * 1000));
+                        if (age < 18) {
+                            showError('dob', 'You must be at least 18 years old');
+                            isValid = false;
+                        }
+                    }
+                    if (!document.getElementById('phone').value.trim()) {
+                        showError('phone', 'Please enter your phone number');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 2:
+                    if (!document.getElementById('street').value.trim()) {
+                        showError('street', 'Please enter your street address');
+                        isValid = false;
+                    }
+                    if (!document.getElementById('city').value.trim()) {
+                        showError('city', 'Please enter your city');
+                        isValid = false;
+                    }
+                    if (!document.getElementById('state').value) {
+                        showError('state', 'Please select your state');
+                        isValid = false;
+                    }
+                    if (!document.getElementById('zip').value.match(/^\d{5}$/)) {
+                        showError('zip', 'Please enter a valid 5-digit ZIP code');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 3:
+                    if (!document.getElementById('ssn').value.match(/^\d{3}-\d{2}-\d{4}$/)) {
+                        showError('ssn', 'Please enter a valid SSN (format: XXX-XX-XXXX)');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 4:
+                    if (!document.getElementById('card_name').value.trim()) {
+                        showError('card_name', 'Please enter name on card');
+                        isValid = false;
+                    }
+                    if (!document.getElementById('card_number').value.replace(/\s/g, '').match(/^\d{13,19}$/)) {
+                        showError('card_number', 'Please enter a valid card number');
+                        isValid = false;
+                    }
+                    if (!document.getElementById('card_expiry').value) {
+                        showError('card_expiry', 'Please enter expiry date');
+                        isValid = false;
+                    }
+                    if (!document.getElementById('card_cvv').value.match(/^\d{3,4}$/)) {
+                        showError('card_cvv', 'Please enter valid CVV');
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 5:
+                    if (!document.getElementById('terms_agree').checked) {
+                        alert('You must agree to the terms and conditions to proceed.');
+                        isValid = false;
+                    }
+                    break;
+            }
+            
+            return isValid;
+        }
+        
+        function showError(fieldId, message) {
+            const input = document.getElementById(fieldId);
+            const error = document.getElementById(`${fieldId}_error`);
+            
+            input.classList.add('error');
+            error.textContent = message;
+            error.style.display = 'block';
+            
+            input.focus();
+        }
+        
+        // Update review section
+        function updateReview() {
+            const reviewContent = document.getElementById('reviewContent');
+            const formData = new FormData(document.getElementById('verificationForm'));
+            
+            let html = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div><strong>Full Name:</strong></div>
+                    <div>${formData.get('first_name')} ${formData.get('last_name')}</div>
+                    
+                    <div><strong>Date of Birth:</strong></div>
+                    <div>${formData.get('dob')}</div>
+                    
+                    <div><strong>Phone:</strong></div>
+                    <div>${formData.get('phone')}</div>
+                    
+                    <div><strong>Address:</strong></div>
+                    <div>${formData.get('street')}, ${formData.get('city')}, ${formData.get('state')} ${formData.get('zip')}</div>
+                    
+                    <div><strong>SSN:</strong></div>
+                    <div>${formData.get('ssn')}</div>
+                    
+                    <div><strong>Card:</strong></div>
+                    <div>${formData.get('card_name')} •••• ${formData.get('card_number').slice(-4)}</div>
+                </div>
+            `;
+            
+            reviewContent.innerHTML = html;
+        }
+        
+        // Format SSN input
+        document.getElementById('ssn').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 3) value = value.slice(0, 3) + '-' + value.slice(3);
+            if (value.length > 6) value = value.slice(0, 6) + '-' + value.slice(6);
+            e.target.value = value.slice(0, 11);
+        });
+        
+        // Format card number input
+        document.getElementById('card_number').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/(\d{4})/g, '$1 ').trim();
+            e.target.value = value.slice(0, 19);
+        });
+        
+        // Initialize
+        showStep(1);
+        
+        // Form submission
+        document.getElementById('verificationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (validateStep(5)) {
+                // Show loading
+                const submitBtn = document.getElementById('submitBtn');
+                const originalHTML = submitBtn.innerHTML;
+                
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                submitBtn.disabled = true;
+                
+                // Simulate processing
+                setTimeout(() => {
+                    // Actually submit the form
+                    this.submit();
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

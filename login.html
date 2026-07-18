@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - TaskRewards Pro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .bonus-reminder {
+            background: rgba(255,215,0,0.3);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 2px dashed gold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="bonus-reminder">
+            <h3>💰 Your $10 bonus is waiting!</h3>
+        </div>
+        
+        <h2>Welcome Back!</h2>
+        <p>Login to access your account and start earning.</p>
+        
+        <form action="verify_login.php" method="POST">
+            <input type="email" name="email" placeholder="Email Address" required>
+            <input type="password" name="password" placeholder="Password" required>
+            
+            <button type="submit">👉 LOGIN & CLAIM BONUS</button>
+        </form>
+        
+        <p style="text-align: center; margin-top: 20px;">
+            <a href="forgot.html" style="color: #4CAF50;">Forgot password?</a> | 
+            <a href="signup.html" style="color: #4CAF50;">Create account</a>
+        </p>
+    </div>
+</body>
+</html>

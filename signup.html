@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- This tag fixes the weird characters -->
+    <meta charset="UTF-8">
+    <title>Sign Up - TaskRewards Pro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .bonus-notice {
+            background: gold;
+            color: black;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="bonus-notice">
+            <h2>🎁 $10 SIGN-UP BONUS!</h2>
+            <p>Create account and get $10 instantly</p>
+        </div>
+        
+        <h2>Create Your Account</h2>
+        
+        <form action="process_signup.php" method="POST">
+            <input type="email" name="email" placeholder="Your Email Address" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            
+            <p><small>By signing up, you agree to our <a href="#" style="color: #4CAF50;">Terms</a> and <a href="#" style="color: #4CAF50;">Privacy Policy</a></small></p>
+            
+            <button type="submit">👉 GET MY $10 BONUS!</button>
+        </form>
+        
+        <p style="text-align: center; margin-top: 20px;">
+            Already have an account? <a href="login.html" style="color: #4CAF50;">Login here</a>
+        </p>
+    </div>
+</body>
+</html>
